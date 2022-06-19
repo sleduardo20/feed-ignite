@@ -1,29 +1,50 @@
+/* eslint-disable react/require-default-props */
+/* eslint-disable react/no-unused-prop-types */
+import { formatDistanceToNow } from "date-fns";
+import ptBR from "date-fns/locale/pt-BR";
 import { ThumbsUp, Trash } from "phosphor-react";
+import { Avatar } from "./Avatar";
 import styles from "./Comment.module.css";
 
-export function Comment() {
+export type CommentProps = {
+  id: string;
+  author: {
+    avatarUrl: string;
+    name: string;
+    publishedAt: Date;
+  };
+  comment: string;
+  deleteComment?: () => void;
+};
+
+export function Comment({ author, comment, deleteComment }: CommentProps) {
+  const publishedDateRelativeToNow = formatDistanceToNow(author.publishedAt, {
+    locale: ptBR,
+    addSuffix: true,
+  });
   return (
     <div className={styles.comment}>
-      <img
-        src="https://avatars.githubusercontent.com/u/56615577?v=4"
-        alt="avatar "
-      />
+      <Avatar src={author.avatarUrl} />
 
       <div className={styles.commentBox}>
         <div className={styles.commentContent}>
           <header>
             <div className={styles.authorAndTime}>
-              <strong>Eduardo Lima</strong>
-              <time title="18 de junho de 2022" dateTime="2022-06-18 00:00">
-                Cerca de 1h atras
+              <strong>{author.name}</strong>
+              <time dateTime={author.publishedAt.toISOString()}>
+                {publishedDateRelativeToNow}
               </time>
             </div>
 
-            <button title="Deletar comentario" type="button">
+            <button
+              title="Deletar comentario"
+              type="button"
+              onClick={deleteComment && deleteComment}
+            >
               <Trash size={24} />
             </button>
           </header>
-          <p>Muito bom Devon, parabens</p>
+          <p>{comment}</p>
         </div>
 
         <footer>
