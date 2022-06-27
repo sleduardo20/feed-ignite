@@ -2,59 +2,16 @@
 /* eslint-disable no-unused-vars */
 import { format, formatDistanceToNow } from "date-fns";
 import ptBR from "date-fns/locale/pt-BR";
-import { v4 as uuidv4 } from "uuid";
-import {
-  FormEvent,
-  HtmlHTMLAttributes,
-  TextareaHTMLAttributes,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { v1 as uuid } from "uuid";
+import { FormEvent, useState } from "react";
 import { Avatar } from "./Avatar";
-import { Comment, CommentProps } from "./Commnet";
+import { Comment } from "./Comment";
 import styles from "./Post.module.css";
+import { CommentProps, PostProps } from "../model/post";
 
-type Content = {
-  type: string;
-  content: string;
-};
-
-export type PostProps = {
-  id: string;
-  author: {
-    name: string;
-    avatarUrl: string;
-    role: string;
-  };
-  publishedAt: Date;
-  content: Content[];
-};
-
-const fetchComments: CommentProps[] = [
-  {
-    id: uuidv4(),
-    author: {
-      name: "John",
-      avatarUrl: "https://github.com/danvitoriano.png",
-      publishedAt: new Date("2022-06-15 00:00:00"),
-    },
-    comment: "Muito bem fulando parabens",
-  },
-  {
-    id: uuidv4(),
-    author: {
-      name: "Maria",
-      avatarUrl: "https://github.com/glaucia86.png",
-      publishedAt: new Date("2022-06-18 00:00:00"),
-    },
-    comment: "Nossa que demais.",
-  },
-];
-
-export function Post({ author, publishedAt, content }: PostProps) {
-  const refTextArea = useRef<HTMLTextAreaElement>(null);
-  const [comments, setComments] = useState<CommentProps[]>([]);
+export function Post({ author, publishedAt, content, comments }: PostProps) {
+  const [comment, setComment] = useState("");
+  const [postComments, setPostComments] = useState(comments);
 
   const publishedDataFormated = format(
     publishedAt,
@@ -70,14 +27,14 @@ export function Post({ author, publishedAt, content }: PostProps) {
   });
 
   const handleDeleteComment = (id: string) => {
-    setComments(comments.filter((i) => i.id !== id));
+    setPostComments(postComments.filter((i) => i.id !== id));
   };
 
   const handleCreateNewComment = (event: FormEvent) => {
     event.preventDefault();
 
     const newComment: CommentProps = {
-      id: uuidv4(),
+      id: uuid(),
       author: {
         avatarUrl: "https://github.com/breakzplatform.png",
         name: "Boot",
@@ -85,17 +42,7 @@ export function Post({ author, publishedAt, content }: PostProps) {
       },
       comment: "refTextArea.current?.value",
     };
-
-    setComments([...comments, newComment]);
-
-    refTextArea.current?.value === "";
-
-    console.log(refTextArea.current?.value);
   };
-
-  useEffect(() => {
-    setComments(fetchComments);
-  }, []);
 
   return (
     <article className={styles.post}>
@@ -119,23 +66,26 @@ export function Post({ author, publishedAt, content }: PostProps) {
       <div className={styles.content}>
         {content.map((line) => {
           if (line.type === "paragraph") {
-            return <p> {line.content} </p>;
+            return <p key={line.id}> {line.content} </p>;
           }
           if (line.type === "link") {
             return (
-              <p>
+              <p key={line.id}>
                 <a href="#">👉 {line.content} </a>{" "}
               </p>
             );
           }
-          return <p key={line.content}>{line.content}</p>;
+          return <p key={line.id}>{line.content}</p>;
         })}
       </div>
 
       <form className={styles.commentForm} onSubmit={handleCreateNewComment}>
         <strong>Deixe seu comentario</strong>
 
-        <textarea ref={refTextArea} placeholder="Deixe seu comentario" />
+        <textarea
+          placeholder="Deixe seu comentario"
+          onChange={(e) => setComment(e.target.value)}
+        />
 
         <footer>
           <button type="submit">Publicar</button>
@@ -143,7 +93,7 @@ export function Post({ author, publishedAt, content }: PostProps) {
       </form>
 
       <div className={styles.commentList}>
-        {comments.map((item) => (
+        {postComments.map((item) => (
           <Comment
             key={item.id}
             {...item}
