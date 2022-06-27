@@ -3,7 +3,8 @@ import { Header } from "./components/Header";
 import "./global.css";
 import styles from "./App.module.css";
 import { Sidebar } from "./components/Sidebar";
-import { Post, PostProps } from "./components/Post";
+import { Post } from "./components/Post";
+import { PostProps } from "./model/post";
 
 const posts: PostProps[] = [
   {
@@ -14,15 +15,36 @@ const posts: PostProps[] = [
       role: "FrontEnd Developer",
     },
     content: [
-      { type: "paragraph", content: "Fala galeraa 👋" },
+      { id: uuidv4(), type: "paragraph", content: "Fala galeraa 👋" },
       {
+        id: uuidv4(),
         type: "paragraph",
         content:
           " Acabei de subir mais um projeto no meu portifa. É um projeto que fiz no NLW Return, evento da Rocketseat. O nome do projeto é DoctorCare 🚀",
       },
-      { type: "link", content: "👉 jane.design/doctorcare" },
+      { id: uuidv4(), type: "link", content: "👉 jane.design/doctorcare" },
     ],
     publishedAt: new Date("2022-06-18 19:45:00"),
+    comments: [
+      {
+        id: uuidv4(),
+        author: {
+          name: "John",
+          avatarUrl: "https://github.com/danvitoriano.png",
+          publishedAt: new Date("2022-06-15 00:00:00"),
+        },
+        comment: "Muito bem fulando parabens",
+      },
+      {
+        id: uuidv4(),
+        author: {
+          name: "Maria",
+          avatarUrl: "https://github.com/glaucia86.png",
+          publishedAt: new Date("2022-06-18 00:00:00"),
+        },
+        comment: "Nossa que demais.",
+      },
+    ],
   },
   {
     id: uuidv4(),
@@ -32,15 +54,36 @@ const posts: PostProps[] = [
       role: "Developer",
     },
     content: [
-      { type: "paragraph", content: "Fala galeraa 👋" },
+      { id: uuidv4(), type: "paragraph", content: "Fala galeraa 👋" },
       {
+        id: uuidv4(),
         type: "paragraph",
         content:
           " Acabei de subir mais um projeto no meu portifa. É um projeto que fiz no NLW Return, evento da Rocketseat. O nome do projeto é DoctorCare 🚀",
       },
-      { type: "link", content: "👉 jane.design/doctorcare" },
+      { id: uuidv4(), type: "link", content: "👉 jane.design/doctorcare" },
     ],
     publishedAt: new Date("2022-06-17 19:45:00"),
+    comments: [
+      {
+        id: uuidv4(),
+        author: {
+          name: "John",
+          avatarUrl: "https://github.com/danvitoriano.png",
+          publishedAt: new Date("2022-06-15 00:00:00"),
+        },
+        comment: "Muito bem fulando parabens",
+      },
+      {
+        id: uuidv4(),
+        author: {
+          name: "Maria",
+          avatarUrl: "https://github.com/glaucia86.png",
+          publishedAt: new Date("2022-06-18 00:00:00"),
+        },
+        comment: "Nossa que demais.",
+      },
+    ],
   },
   {
     id: uuidv4(),
@@ -50,15 +93,36 @@ const posts: PostProps[] = [
       role: "Software Enginee",
     },
     content: [
-      { type: "paragraph", content: "Fala galeraa 👋" },
+      { id: uuidv4(), type: "paragraph", content: "Fala galeraa 👋" },
       {
+        id: uuidv4(),
         type: "paragraph",
         content:
           " Acabei de subir mais um projeto no meu portifa. É um projeto que fiz no NLW Return, evento da Rocketseat. O nome do projeto é DoctorCare 🚀",
       },
-      { type: "link", content: "👉 jane.design/doctorcare" },
+      { id: uuidv4(), type: "link", content: "👉 jane.design/doctorcare" },
     ],
     publishedAt: new Date("2022-06-16 19:45:00"),
+    comments: [
+      {
+        id: uuidv4(),
+        author: {
+          name: "John",
+          avatarUrl: "https://github.com/danvitoriano.png",
+          publishedAt: new Date("2022-06-15 00:00:00"),
+        },
+        comment: "Muito bem fulando parabens",
+      },
+      {
+        id: uuidv4(),
+        author: {
+          name: "Maria",
+          avatarUrl: "https://github.com/glaucia86.png",
+          publishedAt: new Date("2022-06-18 00:00:00"),
+        },
+        comment: "Nossa que demais.",
+      },
+    ],
   },
 ];
 
