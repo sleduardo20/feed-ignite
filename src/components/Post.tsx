@@ -3,14 +3,14 @@
 import { format, formatDistanceToNow } from "date-fns";
 import ptBR from "date-fns/locale/pt-BR";
 import { v1 as uuid } from "uuid";
-import { FormEvent, useState } from "react";
+import { FormEvent, useRef, useState } from "react";
 import { Avatar } from "./Avatar";
 import { Comment } from "./Comment";
 import styles from "./Post.module.css";
 import { CommentProps, PostProps } from "../model/post";
 
 export function Post({ author, publishedAt, content, comments }: PostProps) {
-  const [comment, setComment] = useState("");
+  const textAreaRef = useRef<HTMLTextAreaElement>(null);
   const [postComments, setPostComments] = useState(comments);
 
   const publishedDataFormated = format(
@@ -32,16 +32,23 @@ export function Post({ author, publishedAt, content, comments }: PostProps) {
 
   const handleCreateNewComment = (event: FormEvent) => {
     event.preventDefault();
+    if (!textAreaRef.current?.value) {
+      alert("O campo do comentario esta vazio seu nojento!!!");
+    } else {
+      const newComment: CommentProps = {
+        id: uuid(),
+        author: {
+          avatarUrl: "https://github.com/breakzplatform.png",
+          name: "Boot",
+          publishedAt: new Date(Date.now()),
+        },
+        comment: textAreaRef.current.value,
+      };
 
-    const newComment: CommentProps = {
-      id: uuid(),
-      author: {
-        avatarUrl: "https://github.com/breakzplatform.png",
-        name: "Boot",
-        publishedAt: new Date(Date.now()),
-      },
-      comment: "refTextArea.current?.value",
-    };
+      setPostComments([...postComments, newComment]);
+
+      textAreaRef.current.value = "";
+    }
   };
 
   return (
@@ -82,10 +89,7 @@ export function Post({ author, publishedAt, content, comments }: PostProps) {
       <form className={styles.commentForm} onSubmit={handleCreateNewComment}>
         <strong>Deixe seu comentario</strong>
 
-        <textarea
-          placeholder="Deixe seu comentario"
-          onChange={(e) => setComment(e.target.value)}
-        />
+        <textarea ref={textAreaRef} placeholder="Deixe seu comentario" />
 
         <footer>
           <button type="submit">Publicar</button>
